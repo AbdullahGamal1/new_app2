@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:new_app2/network/remote/dio_helper.dart';
 import 'package:new_app2/shared/cubit/news_cubit.dart';
 
 class NewsScreen extends StatelessWidget {
@@ -11,7 +10,7 @@ class NewsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return BlocProvider(
-      create: (context) => NewsCubit(),
+      create: (context) => NewsCubit()..getBusiness(),
       child: BlocConsumer<NewsCubit, NewsState>(
         listener: (context, state) {
           // TODO: implement listener
@@ -21,14 +20,16 @@ class NewsScreen extends StatelessWidget {
           return Scaffold(
             appBar: AppBar(
               title: Text('News'),
-              actions: [IconButton(onPressed: () {}, icon: Icon(Icons.search))],
+              actions: [
+                IconButton(onPressed: () {}, icon: Icon(Icons.search)),
+                IconButton(
+                    onPressed: () {}, icon: Icon(Icons.brightness_4_outlined))
+              ],
             ),
             body: cubit.screens[cubit.currentIndex],
             floatingActionButton: FloatingActionButton(
               child: Icon(Icons.add),
-              onPressed: () {
-                cubit.getBusiness();
-              },
+              onPressed: () {},
             ),
             bottomNavigationBar: BottomNavigationBar(
               currentIndex: cubit.currentIndex,

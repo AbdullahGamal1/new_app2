@@ -20,6 +20,7 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
+          primarySwatch: Colors.orange,
           scaffoldBackgroundColor: Colors.white,
           appBarTheme: AppBarTheme(
               iconTheme: IconThemeData(color: Colors.black),
@@ -38,7 +39,8 @@ class MyApp extends StatelessWidget {
               type: BottomNavigationBarType.fixed),
           floatingActionButtonTheme:
               FloatingActionButtonThemeData(backgroundColor: Colors.orange)),
-      home: NewsScreen(),
+      home:
+          Directionality(textDirection: TextDirection.rtl, child: NewsScreen()),
     );
   }
 }
