@@ -7,7 +7,7 @@ class SettingScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Center(
       child: Container(
-        child: Text('Setting Screen'),
+        child: const Text('Setting Screen'),
       ),
     );
   }
