@@ -7,6 +7,7 @@ class NewsInitialState extends NewsState {}
 
 class NewsBottomNavState extends NewsState {}
 
+//Business
 class NewsGetBusinessSuccessState extends NewsState {}
 
 class NewsGetBusinessErrorState extends NewsState {
@@ -17,6 +18,7 @@ class NewsGetBusinessErrorState extends NewsState {
 
 class NewsGetBusinessLoadingState extends NewsState {}
 
+//Sports
 class NewsGetSportsSuccessState extends NewsState {}
 
 class NewsGetSportsErrorState extends NewsState {
@@ -27,6 +29,8 @@ class NewsGetSportsErrorState extends NewsState {
 
 class NewsGetSportsLoadingState extends NewsState {}
 
+//Science
+
 class NewsGetScienceSuccessState extends NewsState {}
 
 class NewsGetScienceErrorState extends NewsState {
@@ -36,3 +40,6 @@ class NewsGetScienceErrorState extends NewsState {
 }
 
 class NewsGetScienceLoadingState extends NewsState {}
+
+//Mode
+class NewsChangeAppModeState extends NewsState {}

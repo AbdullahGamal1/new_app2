@@ -18,8 +18,8 @@ class NewsCubit extends Cubit<NewsState> {
     const BottomNavigationBarItem(
         icon: Icon(Icons.business), label: 'Business'),
     const BottomNavigationBarItem(icon: Icon(Icons.sports), label: 'Sports'),
-    const BottomNavigationBarItem(icon: Icon(Icons.science), label: 'Sciens'),
-    const BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings')
+    const BottomNavigationBarItem(icon: Icon(Icons.science), label: 'Science'),
+    // const BottomNavigationBarItem(icon: Icon(Icons.settings), label: 'Settings')
   ];
 
   void changeBottomNavBarIndex(int index) {
@@ -52,7 +52,6 @@ class NewsCubit extends Cubit<NewsState> {
         "apiKey": "4ba02a56473e4228a7a8748f2a12303f"
       }).then((value) {
         business = value.data['articles'];
-        print(business[0]['urlToImage']);
         emit(NewsGetBusinessSuccessState());
       }).catchError((error) {
         emit(NewsGetBusinessErrorState(error.toString()));
@@ -92,7 +91,6 @@ class NewsCubit extends Cubit<NewsState> {
         "apiKey": "4ba02a56473e4228a7a8748f2a12303f"
       }).then((value) {
         science = value.data['articles'];
-        print(science[0]['urlToImage']);
         emit(NewsGetScienceSuccessState());
       }).catchError((error) {
         emit(NewsGetScienceErrorState(error.toString()));
@@ -101,5 +99,12 @@ class NewsCubit extends Cubit<NewsState> {
     } else {
       emit(NewsGetScienceSuccessState());
     }
+  }
+
+  bool isDark = false;
+
+  void changeAppMode() {
+    isDark = !isDark;
+    emit(NewsChangeAppModeState());
   }
 }
