@@ -4,6 +4,7 @@ import 'package:new_app2/modules/business_Screen/business.dart';
 import 'package:new_app2/modules/sciens_screen/science.dart';
 import 'package:new_app2/modules/settings_screen/settings.dart';
 import 'package:new_app2/modules/sports_screen/sports.dart';
+import 'package:new_app2/network/local/cash_helper.dart';
 import 'package:new_app2/network/remote/dio_helper.dart';
 
 part 'news_state.dart';
@@ -43,11 +44,13 @@ class NewsCubit extends Cubit<NewsState> {
   List<dynamic> sports = [];
   List<dynamic> science = [];
 
+  String cuontry = 'us';
+
   void getBusiness() {
     if (business.isEmpty) {
       emit(NewsGetBusinessLoadingState());
       DioHelper.getData(url: 'v2/top-headlines', query: {
-        "country": "us",
+        "country": cuontry,
         'category': 'business',
         "apiKey": "4ba02a56473e4228a7a8748f2a12303f"
       }).then((value) {
@@ -66,7 +69,7 @@ class NewsCubit extends Cubit<NewsState> {
     if (sports.isEmpty) {
       emit(NewsGetSportsLoadingState());
       DioHelper.getData(url: 'v2/top-headlines', query: {
-        "country": "us",
+        "country": cuontry,
         'category': 'sports',
         "apiKey": "4ba02a56473e4228a7a8748f2a12303f"
       }).then((value) {
@@ -86,7 +89,7 @@ class NewsCubit extends Cubit<NewsState> {
     if (science.isEmpty) {
       emit(NewsGetScienceLoadingState());
       DioHelper.getData(url: 'v2/top-headlines', query: {
-        "country": "us",
+        "country": cuontry,
         'category': 'science',
         "apiKey": "4ba02a56473e4228a7a8748f2a12303f"
       }).then((value) {
@@ -101,10 +104,31 @@ class NewsCubit extends Cubit<NewsState> {
     }
   }
 
+  List<dynamic> search = [];
+  void getSearch(String value) {
+    emit(NewsGetSearchLoadingState());
+    DioHelper.getData(url: 'v2/everything', query: {
+      'q': "$value",
+      "apiKey": "4ba02a56473e4228a7a8748f2a12303f"
+    }).then((value) {
+      search = value.data['articles'];
+      emit(NewsGetSearchSuccessState());
+    }).catchError((error) {
+      emit(NewsGetSearchErrorState(error.toString()));
+      print(error.toString());
+    });
+  }
+
   bool isDark = false;
 
-  void changeAppMode() {
-    isDark = !isDark;
-    emit(NewsChangeAppModeState());
+  void changeAppMode({bool? fromShared}) {
+    if (fromShared != null) {
+      isDark = fromShared;
+    } else {
+      isDark = !isDark;
+    }
+    CacheHelper.putBoolean(key: 'isDark', value: isDark).then((value) {
+      emit(NewsChangeAppModeState());
+    });
   }
 }

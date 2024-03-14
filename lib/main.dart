@@ -2,23 +2,40 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:new_app2/layout/news_layout.dart';
+import 'package:new_app2/network/local/cash_helper.dart';
 import 'package:new_app2/network/remote/dio_helper.dart';
 import 'package:new_app2/shared/cubit/news_cubit.dart';
 import 'package:new_app2/shared/style/bloc_observer.dart';
 
-void main() {
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
   Bloc.observer = MyBlocObserver();
   DioHelper.init();
-  runApp(const MyApp());
+  await CacheHelper.init();
+  bool? isDark = CacheHelper.getBoolean(key: 'isDark');
+  isDark ??= false;
+
+  runApp(MyApp(isDark));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+  const MyApp(this.isDark, {super.key});
+
+  final bool isDark;
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => NewsCubit()..getBusiness(),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => NewsCubit()..changeAppMode(fromShared: isDark),
+        ),
+        BlocProvider(
+            create: (_) => NewsCubit()
+              ..getBusiness()
+              ..getSports()
+              ..getScience()),
+      ],
       child: BlocConsumer<NewsCubit, NewsState>(
         listener: (context, state) {},
         builder: (context, state) {
@@ -49,7 +66,7 @@ class MyApp extends StatelessWidget {
                 backgroundColor: Colors.orange,
               ),
               textTheme: const TextTheme(
-                bodyText1: TextStyle(
+                bodyLarge: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                   color: Colors.deepOrange,
@@ -83,16 +100,14 @@ class MyApp extends StatelessWidget {
                 backgroundColor: Colors.deepOrange,
               ),
               textTheme: const TextTheme(
-                bodyText1: TextStyle(
+                bodyLarge: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                   color: Colors.deepOrange,
                 ),
               ),
             ),
-            themeMode: NewsCubit.get(context).isDark
-                ? ThemeMode.dark
-                : ThemeMode.light,
+            themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
             home: const NewsScreen(),
           );
         },
