@@ -1,6 +1,42 @@
 import 'package:conditional_builder_null_safety/conditional_builder_null_safety.dart';
 import 'package:flutter/material.dart';
 
+Widget defaultFormField({
+  required TextEditingController controller,
+  required TextInputType type,
+  Function? onSubmit,
+  Function? onTap,
+  Function? onChange,
+  Function? validate,
+  required String? label,
+  required IconData? prefixIcon,
+  IconData? suffixIcon,
+  bool isClickable = true,
+}) {
+  return TextFormField(
+      decoration: InputDecoration(
+        labelText: label,
+        enabled: isClickable,
+        prefixIcon: Icon(prefixIcon),
+        suffixIcon: Icon(suffixIcon),
+        border: OutlineInputBorder(),
+      ),
+      controller: controller,
+      keyboardType: type,
+      onChanged: (value) {
+        onChange!(value);
+      },
+      onTap: () {
+        onTap!();
+      },
+      onFieldSubmitted: (value) {
+        onSubmit!();
+      },
+      validator: (value) {
+        validate!(value);
+      });
+}
+
 Widget buildArticleItem(article, context) => Padding(
       padding: const EdgeInsets.all(20.0),
       child: Row(
@@ -16,7 +52,7 @@ Widget buildArticleItem(article, context) => Padding(
           ),
           const SizedBox(width: 20),
           Expanded(
-            child: Container(
+            child: SizedBox(
               height: 120,
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
@@ -26,10 +62,10 @@ Widget buildArticleItem(article, context) => Padding(
                     child: Text('${article['title']}',
                         maxLines: 4,
                         overflow: TextOverflow.ellipsis,
-                        style: Theme.of(context).textTheme.bodyText1),
+                        style: Theme.of(context).textTheme.bodyLarge),
                   ),
                   Text('${article['publishedAt']}',
-                      style: Theme.of(context).textTheme.bodyText1),
+                      style: Theme.of(context).textTheme.bodyLarge),
                 ],
               ),
             ),
@@ -59,3 +95,9 @@ Widget articleBuilder(list, context) {
     ),
   );
 }
+
+void navigateTo(context, widget) => Navigator.push(
+    context,
+    MaterialPageRoute(
+      builder: (context) => widget,
+    ));

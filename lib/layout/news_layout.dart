@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:new_app2/modules/search/search.dart';
+import 'package:new_app2/shared/component/components.dart';
 import 'package:new_app2/shared/cubit/news_cubit.dart';
 
 class NewsScreen extends StatelessWidget {
@@ -9,15 +11,20 @@ class NewsScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    var newsCubit = BlocProvider.of<NewsCubit>(context);
     return BlocConsumer<NewsCubit, NewsState>(
       listener: (context, state) {},
       builder: (context, state) {
-        var cubit = NewsCubit.get(context);
+        var cubit = newsCubit;
         return Scaffold(
           appBar: AppBar(
             title: const Text('News'),
             actions: [
-              IconButton(onPressed: () {}, icon: const Icon(Icons.search)),
+              IconButton(
+                  onPressed: () {
+                    navigateTo(context, SearchScreen());
+                  },
+                  icon: const Icon(Icons.search)),
               IconButton(
                 icon: const Icon(Icons.brightness_4),
                 onPressed: () {

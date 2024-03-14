@@ -16,3 +16,4 @@ class DioHelper {
     );
   }
 }
+//https://newsapi.org/v2/everything?q=s&apiKey=4ba02a56473e4228a7a8748f2a12303f

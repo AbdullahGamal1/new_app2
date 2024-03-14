@@ -43,6 +43,7 @@ class NewsCubit extends Cubit<NewsState> {
   List<dynamic> business = [];
   List<dynamic> sports = [];
   List<dynamic> science = [];
+
   String cuontry = 'us';
 
   void getBusiness() {
@@ -101,6 +102,21 @@ class NewsCubit extends Cubit<NewsState> {
     } else {
       emit(NewsGetScienceSuccessState());
     }
+  }
+
+  List<dynamic> search = [];
+  void getSearch(String value) {
+    emit(NewsGetSearchLoadingState());
+    DioHelper.getData(url: 'v2/everything', query: {
+      'q': "$value",
+      "apiKey": "4ba02a56473e4228a7a8748f2a12303f"
+    }).then((value) {
+      search = value.data['articles'];
+      emit(NewsGetSearchSuccessState());
+    }).catchError((error) {
+      emit(NewsGetSearchErrorState(error.toString()));
+      print(error.toString());
+    });
   }
 
   bool isDark = false;

@@ -5,10 +5,8 @@ class SettingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Center(
-      child: Container(
-        child: const Text('Setting Screen'),
-      ),
+    return const Center(
+      child: Text('Setting Screen'),
     );
   }
 }

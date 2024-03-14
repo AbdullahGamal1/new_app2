@@ -13,19 +13,29 @@ void main() async {
   DioHelper.init();
   await CacheHelper.init();
   bool? isDark = CacheHelper.getBoolean(key: 'isDark');
+  isDark ??= false;
 
-  runApp(MyApp(isDark: isDark!));
+  runApp(MyApp(isDark));
 }
 
 class MyApp extends StatelessWidget {
-  const MyApp({super.key, required this.isDark});
+  const MyApp(this.isDark, {super.key});
+
   final bool isDark;
+
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => NewsCubit()
-        ..getBusiness()
-        ..changeAppMode(fromShared: isDark),
+    return MultiBlocProvider(
+      providers: [
+        BlocProvider(
+          create: (_) => NewsCubit()..changeAppMode(fromShared: isDark),
+        ),
+        BlocProvider(
+            create: (_) => NewsCubit()
+              ..getBusiness()
+              ..getSports()
+              ..getScience()),
+      ],
       child: BlocConsumer<NewsCubit, NewsState>(
         listener: (context, state) {},
         builder: (context, state) {
@@ -56,7 +66,7 @@ class MyApp extends StatelessWidget {
                 backgroundColor: Colors.orange,
               ),
               textTheme: const TextTheme(
-                bodyText1: TextStyle(
+                bodyLarge: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                   color: Colors.deepOrange,
@@ -90,16 +100,14 @@ class MyApp extends StatelessWidget {
                 backgroundColor: Colors.deepOrange,
               ),
               textTheme: const TextTheme(
-                bodyText1: TextStyle(
+                bodyLarge: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.w600,
                   color: Colors.deepOrange,
                 ),
               ),
             ),
-            themeMode: NewsCubit.get(context).isDark
-                ? ThemeMode.dark
-                : ThemeMode.light,
+            themeMode: isDark ? ThemeMode.dark : ThemeMode.light,
             home: const NewsScreen(),
           );
         },
